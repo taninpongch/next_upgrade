@@ -1,0 +1,16 @@
+{
+  "name": "srcws",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nx dev facingweb",
+    "build": "nx build facingweb",
+    "ui-build":"nx build @manaapp/ui"
+  },
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "18.0.8",
+    "nx": "18.0.8"
+  }
+}

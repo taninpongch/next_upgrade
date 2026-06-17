@@ -1,0 +1,122 @@
+<template>
+  <MuiPage>
+    <!-- TODO add title -->
+    <MuiHeader title="ขออนุญาตทำสัญญา" />
+    <MuiCard>
+      <BizSharePartyHero :src="data?.baPicUrl" :title="data?.baName" :subtitle="data?.createdDate" />
+    </MuiCard>
+    <MuiCard>
+      <BizShareItemInfo heading="รายละเอียดสัญญา" title="ขออนุญาตเชื่อมระบบกับบัญชี mana ของคุณ" :title-button="{ icon: 'i-ion-information-circle-outline' }"/>
+      <BizShareItemInfo heading="ตำแหน่ง" title="Rider" />
+
+      <!-- <BizShareListInfoHorizontal heading="รายละเอียดสัญญา" :infos="bankinfo" /> -->
+
+      <!-- <BizShareSessionTitle label="สถานะการยืนยันตัวตน" />
+      <BizShareText text="ยังไม่ทำ" color="red" alignment="center" />
+      <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+
+      <!-- <BizShareSessionTitle label="สถานะการยืนยันตัวตน" />
+      <BizShareItemStatus title="การยืนยันข้อมูล" rightText="ยังไม่ทำ" :transparent="true" @on-tapped=""
+        right-color="red" />
+        <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+
+      <!-- <BizShareItemInfo heading="สถานะการยืนยันตัวตน" title="ยังไม่ทำ" />
+      <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+    </MuiCard>
+    <MuiCard>
+      <!-- <BizShareSessionTitle label="สถานะการยืนยันตัวตน" />
+      <BizShareText text="ยังไม่ทำ" color="red" alignment="center" />
+      <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+
+      <BizShareSessionTitle label="สถานะการยืนยันตัวตน" />
+      <BizShareItemStatus title="การยืนยันข้อมูล" rightText="ทำแล้ว" :transparent="true" @on-tapped="" right-color="blue">
+      </BizShareItemStatus>
+      <!-- <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+
+      <!-- <BizShareSessionTitle label="สถานะการยืนยันตัวตน" />
+      <BizShareItemStatus title="การยืนยันข้อมูล" rightText="ยังไม่ทำ" :transparent="true" @on-tapped=""
+        right-color="red" />
+        <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+
+      <BizShareSessionTitle label="ตั้งชื่อ Displayname" />
+      <BizShareItemLink title="Rider01" @on-tapped="toName" />
+      <!-- <p class="mt-2 text-red-500 dark:text-red-400 text-sm">Invalid request</p> -->
+
+    </MuiCard>
+    <BizShareManaForm :schema="validationRules" :state="dataForm" @submit="onSubmit">
+      <!-- <ConsentButtonsBand accept-app-text="Accept" reject-app-text="Reject" accept-text="Accept" reject-text="Reject"
+        :v-model="dataForm.acceptances"></ConsentButtonsBand> -->
+    </BizShareManaForm>
+  </MuiPage>
+</template>
+
+<script lang="ts" setup>
+import { storeToRefs } from "pinia";
+import { ConsentButtonsBand, getManaContext } from "@manaapp/ui";
+import type { FormSubmitEvent } from "#ui/types";
+import { z } from "zod";
+
+const data = ref<any>();
+const lineInfo = ref<any>([]);
+const selectedDelivery = ref<any>();
+
+const bankinfo: any[] = [
+  { label: "เรื่อง", value: "ขออนุญาตเชื่อมระบบกับบัญชี mana ของคุณ" },
+  { label: "ตำแหน่ง", value: "Rider" },
+];
+
+data.value = {
+  _id: "123",
+  baName: "DemoDelivery",
+  baPicUrl: "https://failfast.blob.core.windows.net/mcontent-imgs/temps/delivery/dfdelivery.png",
+  createdDate: "12/03/2024 17.00 น.",
+  manaDisplayName: "manaDisplayName",
+  manaPicUrl: "https://failfast.blob.core.windows.net/mcontent-imgs/temps/delivery/dfdelivery.png",
+  lineDisplayName: "lineDisplayName",
+  deliveryList: [
+    {
+      _id: "123",
+      name: "name",
+      logoUrl: "https://failfast.blob.core.windows.net/mcontent-imgs/temps/delivery/dfdelivery.png"
+    }
+  ]
+};
+lineInfo.value = [{
+  label: 'Display name',
+  value: "lineDisplayName",
+}];
+
+const validationRules = z.object({
+  acceptances: z.string()
+});
+
+type Schema = z.output<typeof validationRules>;
+
+const dataForm = ref({
+  acceptances: ""
+});
+
+const toName = () => {
+  navigateTo('name')
+};
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // if (event.data) {
+  //   var formdata = {
+  //     Acceptances: [dataForm.acceptances]
+  //   };
+  //   await postSubmitConsentData(formdata, "post-consent-link-rider-line-ads", "delivery");
+  // }
+}
+
+const selectedItemName = computed(() => {
+  let name = selectedDelivery.value?.name;
+  return name;
+});
+
+const selectedItemImage = computed(() => {
+  let imgUrl = selectedDelivery.value?.logoUrl?.startsWith("https://") ? selectedDelivery.value?.logoUrl : `https://${selectedDelivery.value?.logoUrl}`;
+  return imgUrl;
+});
+
+</script>
