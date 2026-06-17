@@ -1,8 +1,8 @@
 <template>
   <UFormGroup :label="label">
-    <UPopover :ui="{ trigger: '' }" :popper="{ placement: 'bottom-start' }" v-bind:disabled="$attrs.disabled">
+    <UPopover :ui="{ trigger: '' }" :popper="{ placement: 'bottom-start' }" :disabled="Boolean($attrs.disabled)">
       <UInput :placeholder="placeholder" :ui="{ base: 'disabled:bg-gray-200 dark:disabled:bg-black' }"
-      :value="modelValue ? format(date, 'd MMMM yyyy') : ''" v-bind:disabled="$attrs.disabled" />
+      :value="modelValue ? format(date, 'd MMMM yyyy') : ''" :disabled="Boolean($attrs.disabled)" />
         
       <template #panel="{ close }">
         <MuiDatePicker v-model="date" @close="close" @update:model-value="handleInput" />

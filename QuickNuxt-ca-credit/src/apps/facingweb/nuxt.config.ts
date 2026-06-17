@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: false },
   app: {
-    baseURL: '/wallets_202602201640/',
+    baseURL: '/ba_202606171630/',
     head: {
       title: 'Mana App Starter',
     },

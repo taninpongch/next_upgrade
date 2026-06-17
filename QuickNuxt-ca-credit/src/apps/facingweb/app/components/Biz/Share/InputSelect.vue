@@ -1,7 +1,7 @@
 <template>
   <UFormGroup :label="label">
     <USelect :placeholder="placeholder" :options="options" option-attribute="name" :ui="{ base: 'disabled:bg-gray-200 dark:disabled:bg-black' }"
-      :value="modelValue" @input="handleInput" v-bind:disabled="$attrs.disabled" />
+      :model-value="modelValue" @update:model-value="handleInput" :disabled="Boolean($attrs.disabled)" />
   </UFormGroup>
 </template>
 
@@ -20,9 +20,7 @@ const props = withDefaults(
 
 const emitName = "update:modelValue";
 const emits = defineEmits([emitName]);
-function handleInput($ev: any) {
-  const evalue = $ev.target.value;
-  $ev.target.parentNode.dataset.replicatedValue = evalue;
-  emits(emitName, evalue);
+function handleInput(value: string | number | null | undefined) {
+  emits(emitName, value == null ? '' : String(value));
 }
 </script>

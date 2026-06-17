@@ -184,10 +184,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 const onSelectType = async () => {
+  console.log("dataForm.value.bizType", dataForm.value.bizType);
+
   let optionDlgResult = await manaLib.showOptionDlg("ba-kym-basic-select-type", "2btn", JSON.stringify(dataForm.value.bizType), "ok", "cancel", "f");
   if (optionDlgResult && !optionDlgResult.isCancel) {
+    console.log("Done", optionDlgResult);
+
     dataForm.value.bizType = optionDlgResult?.selection;
   }
+  
 }
 
 const displayType = computed(() => {
