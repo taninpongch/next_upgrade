@@ -96,7 +96,7 @@ const uploadLogo = async () => {
         dataForm.value.logoResourceName = getFileInfo.FileName
         dataForm.value.logoResourceKey = "logoResourceKey";
         logoBase64String.value = getFileInfo.Content
-        logoBase64ImgType.value = `image/${uploadRes.selection?.extension}`
+        logoBase64ImgType.value = `image/${uploadRes?.selection?.extension}`
         setupEnvironment();
       }
     }
@@ -111,7 +111,7 @@ const uploadLogo = async () => {
       dataForm.value.logoResourceName = getFileInfo.FileName
       dataForm.value.logoResourceKey = "logoResourceKey";
       logoBase64String.value = getFileInfo.Content
-      logoBase64ImgType.value = `image/${uploadRes.selection?.extension}`
+      logoBase64ImgType.value = `image/${uploadRes?.selection?.extension}`
       setupEnvironment();
     }
   }
@@ -131,7 +131,7 @@ const uploadShopImg = async () => {
         dataForm.value.shopPicResourceName = getFileInfo.FileName
         dataForm.value.shopPicResourceKey = "shopPicResourceKey";
         shopPicBase64String.value = getFileInfo.Content
-        shopPicBase64ImgType.value = `image/${uploadRes.selection?.extension}`
+        shopPicBase64ImgType.value = `image/${uploadRes?.selection?.extension}`
         setupEnvironment();
       }
     }
@@ -147,7 +147,7 @@ const uploadShopImg = async () => {
       dataForm.value.shopPicResourceName = getFileInfo.FileName
       dataForm.value.shopPicResourceKey = "shopPicResourceKey";
       shopPicBase64String.value = getFileInfo.Content
-      shopPicBase64ImgType.value = `image/${uploadRes.selection?.extension}`
+      shopPicBase64ImgType.value = `image/${uploadRes?.selection?.extension}`
       setupEnvironment();
     }
   }
@@ -192,7 +192,7 @@ const onSelectType = async () => {
 
     dataForm.value.bizType = optionDlgResult?.selection;
   }
-  
+
 }
 
 const displayType = computed(() => {

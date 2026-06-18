@@ -7,8 +7,8 @@
   <UFormGroup :label="label">
     <BizShareImage v-if="src" :size="size" :rounded="rounded" :src="src" />
     <div class="flex items-center space-x-1">
-      <UInput :placeholder="placeholder" readonly :value="modelValue" type="text" />
-      <UButton :color="btnColor" :label="btnLabel" @click="emits(emitName)" type="button"/>
+      <UInput :placeholder="placeholder" readonly :model-value="modelValue" type="text" />
+      <UButton :color="btnColor" :label="btnLabel" @click="emits(emitName)" type="button" />
     </div>
   </UFormGroup>
 </template>

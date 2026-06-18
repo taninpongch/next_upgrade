@@ -18,12 +18,12 @@
       <!-- <BizShareItemStatus title="ยืนยันตัวตนแบบขั้นสูง" src="i-ion-checkmark-circle-outline" rightText="ยังไม่ทำ" /> -->
       <BizShareActionNormal @click="gotoEditCreate()" v-if="checkStatus == 'reject'" icon="i-ph-camera-fill"
         :rounded="true" label="ทำใหม่อีกครั้ง" />
-      <MuiCard v-if="datakyc.data.recommen && checkStatus == 'reject'" class="bg-gray-500  text-white">
+      <MuiCard v-if="datakyc?.data?.recommen && checkStatus == 'reject'" class="bg-gray-500  text-white">
         <div class="flex items-center">
           <UIcon name="i-ion-ios-person-outline" class="w-5 h-5" />
           <p class="text-white">ข้อแนะนำ</p>
         </div>
-        <p>{{ datakyc.data.recommen }}</p>
+        <p>{{ datakyc?.data?.recommen }}</p>
       </MuiCard>
     </MuiPage>
   </div>
@@ -51,7 +51,7 @@ const logoProfile = computed(() => {
   if (datakyc?.value == null) {
     return "";
   }
-  return manaLib.getUrl(datakyc?.value.data?.logo.host, datakyc?.value.data?.logo.path)
+  return manaLib.getUrl(datakyc?.value.data?.logo?.host, datakyc?.value.data?.logo?.path)
 })
 
 getData('get-basic-th-main-status').then(async () => {
