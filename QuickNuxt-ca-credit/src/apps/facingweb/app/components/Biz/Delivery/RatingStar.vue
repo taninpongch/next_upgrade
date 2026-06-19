@@ -1,13 +1,15 @@
 <template>
-  <div class="flex items-center justify-between gap-3 px-20 sm:px-6">
-    <button type="button" v-for="star in totalStars" :key="star" @click="setRating(star)" @mouseover="hoverRating(star)"
-      @mouseleave="resetHover" :class="{
-        'text-yellow-400': isStarFilled(star),
-        'text-gray-300': !isStarFilled(star),
-      }">
-      <i class="i-heroicons-star-16-solid" v-if="isStarFilled(star)"></i>
-      <i class="i-heroicons-star" v-else></i>
-    </button>
+  <div class="grid grid-cols-6">
+    <div class="col-span-4 col-start-2 m-auto">
+        <button type="button" v-for="star in totalStars" :key="star" @click="setRating(star)" @mouseover="hoverRating(star)"
+        @mouseleave="resetHover" :class="{
+          'text-yellow-400': isStarFilled(star),
+          'text-gray-300': !isStarFilled(star),
+        }">
+        <UIcon name="i-heroicons-star-16-solid" class="w-8 h-8" v-if="isStarFilled(star)"></UIcon>
+        <UIcon name="i-heroicons-star" class="w-8 h-8" v-else></UIcon>
+      </button>
+    </div>
   </div>
 </template>
 
