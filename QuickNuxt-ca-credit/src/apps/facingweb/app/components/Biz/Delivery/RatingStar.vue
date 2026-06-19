@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-6">
     <div class="col-span-4 col-start-2 m-auto">
-        <button type="button" v-for="star in totalStars" :key="star" @click="setRating(star)" @mouseover="hoverRating(star)"
+        <button type="button" v-for="star in totalStars" :key="star" @pointerdown="setRating(star)" @click.prevent @mouseover="hoverRating(star)"
         @mouseleave="resetHover" :class="{
           'text-yellow-400': isStarFilled(star),
           'text-gray-300': !isStarFilled(star),
@@ -45,10 +45,3 @@ const isStarFilled = (star: any) => {
 }
 
 </script>
-
-<style scoped>
-.i-heroicons-star,
-.i-heroicons-star-16-solid {
-  font-size: 1.5rem;
-}
-</style>
