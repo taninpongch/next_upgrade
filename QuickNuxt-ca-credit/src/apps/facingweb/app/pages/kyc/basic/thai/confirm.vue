@@ -54,6 +54,7 @@ getData('get-basic-th-confirm').then(async () => {
 
   infosOther.value = [
     { label: "อาชีพ", value: datakyc?.value.data.occupation },
+    { label: "วัตถุประสงค์การใช้งาน", value: datakyc?.value.data.purpose },
     { label: "ที่อยู่ปัจจุบัน", value: getAddress(datakyc?.value.data.currentaddress) },
     { label: "ตรวจสอบเบอร์โทรศัพท์ของคุณ", value: datakyc?.value.data.hidephone }
   ];

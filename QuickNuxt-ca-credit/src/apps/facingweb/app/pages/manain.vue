@@ -463,6 +463,8 @@ const getPath = async (flowId: any) => {
     // thai
     case "kyc-basic-th-preScan": return "kyc/basic/thai/preScan"
       break;
+    case "kyc-basic-th-preScan-FacePid": return "kyc/basic/thai/preScanFacePid"
+      break;
     case "kyc-basic-th-create": return "kyc/basic/thai/create"
       break;
     case "kyc-basic-th-createInfo": return "kyc/basic/thai/createInfo"

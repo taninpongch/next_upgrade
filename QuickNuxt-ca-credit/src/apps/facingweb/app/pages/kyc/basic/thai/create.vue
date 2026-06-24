@@ -15,8 +15,8 @@
 
         <BizShareInputText v-if="maskidcard && maskidcard.length == 13 && checkTrue" @Change="delInputIDcard()"
           label="เลขบัตรประชาชน" type="text" placeholder="เช่น 1234567890123" v-model="maskidcard" />
-        <BizShareInputText v-else label="เลขบัตรประชาชน" type="number" placeholder="เช่น 1234567890123"
-          v-model="dataForm.idcard" name="idcard" />
+        <BizShareInputText v-else label="เลขบัตรประชาชน" type="text" inputMode="numeric" pattern="[0-9]*"
+          placeholder="เช่น 1234567890123" v-model="dataForm.idcard" name="idcard" @input="handleIdCardInput" />
 
         <BizShareValidateItem v-model="dataForm.address.line1" name="address.line1">
           <!-- <BizShareItemLink @click="goVisit('kyc', 'kyc-basic-th-address', 'endp-address')" -->
@@ -47,6 +47,11 @@ const delInputIDcard = async () => {
   dataForm.value.idcard = '';
   maskidcard.value = '';
   saveDataToMobile();
+}
+
+const handleIdCardInput = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  dataForm.value.idcard = input.value.replace(/\D/g, '');
 }
 
 const kyc = useKycStore();
@@ -159,7 +164,7 @@ const validationRules = z.object({
   }) as any,
 
   // address: z.string().min(1, "Invalid request"),
-  idcard: z.string().min(13, "Invalid request"),
+  idcard: z.string().min(13, "Invalid request").max(13, "Invalid request"),
   remember: z.boolean()
 });
 

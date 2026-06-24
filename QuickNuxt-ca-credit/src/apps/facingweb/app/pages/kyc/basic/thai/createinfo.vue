@@ -36,6 +36,12 @@
             v-model="dataForm.occupationCode" name="occupationCode" />
           <BizShareInputText v-if="dataForm.occupationCode === 'Z999'" label="โปรดระบุอาชีพ"
             placeholder="เช่น ธุรกิจส่วนตัว" v-model="dataForm.occupationOrther" name="occupationOrther" />
+
+          <BizShareInputSelect label="วัตถุประสงค์การใช้งาน" placeholder="ระบุวัตถุประสงค์การใช้งาน"
+            :options="purposeList" v-model="dataForm.purposeCode" name="purposeCode" />
+          <BizShareInputText v-if="dataForm.purposeCode === 'Z999'" label="โปรดระบุวัตถุประสงค์การใช้งาน"
+            placeholder="เช่น ธุรกิจส่วนตัว" v-model="dataForm.purposeOther" name="purposeOther" />
+
           <BizShareValidateItem v-model="dataForm.currentaddress.line1" name="currentaddress.line1">
             <BizShareItemLink @click="goToCurrentAddress()" title="ที่อยู่ปัจจุบัน" :description="addCurrentAddress"
               :transparent="false" />
@@ -51,7 +57,7 @@
 
         <ActionButton text="ถัดไป" />
       </BizShareManaForm>
- 
+
     </MuiPage>
   </div>
 
@@ -79,6 +85,8 @@ const delInputBackIDcard = async () => {
   maskbackidcard.value = '';
   saveDataToMobile();
 }
+
+const normalizeBackIdCard = (value: string) => value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 12);
 
 const inputBackIDcard = async (inputBackIDcard: string) => {
   dataForm.value.backidcard = inputBackIDcard
@@ -109,6 +117,11 @@ getData('get-basic-th-create-info').then(async () => {
   if (datakyc?.value.data.occupationCode == "Z999" || datakyc?.value.data.occupationCode == "z999") {
     dataForm.value.occupationOrther = datakyc?.value.data.occupationTitle
   }
+  dataForm.value.purposeCode = datakyc?.value.data.purposeCode ? datakyc?.value.data.purposeCode : '';
+  if (datakyc?.value.data.purposeCode == "Z999" || datakyc?.value.data.purposeCode == "z999") {
+    dataForm.value.purposeOther = datakyc?.value.data.purposeTitle
+  }
+
   dataForm.value.phone = datakyc?.value.data.phone ? datakyc?.value.data.phone : '';
   // dataForm.value.photograph = datakyc.value.data.photograph ? datakyc.value.data.photograph : '';
   dataForm.value.remember = datakyc?.value.session.remember;
@@ -125,7 +138,7 @@ getData('get-basic-th-create-info').then(async () => {
 
 // เพิ่มฟังก์ชัน autoDashBackidcard เพื่อเติม '-' หลังตัวที่ 3 และตัวที่ 10 (แก้ไขให้รองรับ v-model)
 const autoDashBackidcard = (e: Event) => {
-  let val = (e.target as HTMLInputElement).value.replace(/-/g, '');
+  let val = normalizeBackIdCard((e.target as HTMLInputElement).value);
   if (val.length > 3) {
     val = val.slice(0, 3) + '-' + val.slice(3);
   }
@@ -184,13 +197,15 @@ const initData = reactive({
   } as any,
   occupationCode: '',
   occupationOrther: '',
+  purposeCode: '',
+  purposeOther: '',
   phone: '',
   photograph: '',
   remember: false
 });
 
 const validationRules = z.object({
-  backidcard: z.string().refine(val => val.replace(/-/g, '').length === 12, { message: "Invalid request" }),
+  backidcard: z.string().refine(val => /^[A-Z0-9]{12}$/.test(normalizeBackIdCard(val)), { message: "Invalid request" }),
   currentaddress: z.object({
     line1: z.string().min(1, "Invalid request"),
     district: z.string(),
@@ -209,6 +224,17 @@ const validationRules = z.object({
   }, {
     message: "Invalid request",
   }),
+
+  purposeCode: z.string().min(1, "Invalid request"),
+  purposeOther: z.string().refine((value) => {
+    if (dataForm.value.purposeCode === 'Z999') {
+      dataForm.value.purposeOther = value;
+      return value !== '';
+    }
+    return true;
+  }, {
+    message: "Invalid request",
+  }),
   phone: z.string().min(1, "Invalid request"),
   // photograph: z.string().min(1, "Invalid request"),
   photograph: z.string(),
@@ -217,6 +243,66 @@ const validationRules = z.object({
 
 const dataForm = ref(initData);
 type Schema = z.output<typeof validationRules>;
+
+const purposeList = ref([
+  {
+    name: 'บริการเดลิเวอรี่', value: 'B001', riskLevel: 'undefined'
+  }, {
+    name: 'รับเงินเดือน', value: 'B002', riskLevel: 'undefined'
+  }, {
+    name: 'เพื่อชำระค่าสินค้าและบริการทั่วไป', value: 'A001', riskLevel: 'undefined'
+  }, {
+    name: 'เพื่อชำระค่าสาธารณูปโภค / บิล', value: 'A002', riskLevel: 'undefined'
+  }, {
+    name: 'เพื่อโอนเงินให้สมาชิกในครอบครัว', value: 'A003', riskLevel: 'undefined'
+  }, {
+    name: 'เพื่อรับชำระเงินจากการค้าขาย', value: 'A004', riskLevel: 'undefined'
+  }, {
+    name: 'เพื่อการออมและบริหารเงินส่วนตัว', value: 'A005', riskLevel: 'undefined'
+  }, {
+    name: 'อื่นๆ (โปรดระบุ)', value: 'Z999', riskLevel: 'undefined'
+  }
+]);
+
+const getpurposename = async (code: string) => {
+  switch (code) {
+    case "B001": return "บริการเดลิเวอรี่"
+      break;
+    case 'B002': return "รับเงินเดือน"
+      break;
+    case "A001": return "เพื่อชำระค่าสินค้าและบริการทั่วไป"
+      break;
+    case "A002": return "เพื่อชำระค่าสาธารณูปโภค / บิล"
+      break;
+    case "A003": return "เพื่อโอนเงินให้สมาชิกในครอบครัว"
+      break;
+    case "A004": return "เพื่อรับชำระเงินจากการค้าขาย"
+      break;
+    case "A005": return "เพื่อการออมและบริหารเงินส่วนตัว"
+      break;
+    case "Z999": return dataForm.value.purposeOther
+      break;
+    default: return "index"
+      break;
+  }
+}
+
+const getpurposeriskLevel = async (code: string) => {
+  switch (code) {
+    case "A001":
+    case "A002":
+    case "A003":
+    case "A004":
+    case "A005":
+    case "B001":
+    case "B002":
+    case "Z999":
+      return "undefined"
+      break;
+    default: return "index"
+      break;
+  }
+}
 
 const occupationList = ref([{
   name: 'รับจ้างทั่วไป/พนักงานเงินเดือน', value: 'A001', riskLevel: 'low'
@@ -247,9 +333,10 @@ const occupationList = ref([{
 }, {
   name: 'ธุรกิจนำเที่ยว/ทัวร์', value: 'B010', riskLevel: "high"
 }, {
-  name: 'อื่นๆ โปรดระบุ', value: 'Z999', riskLevel: 'low'
+  name: 'อื่นๆ (โปรดระบุ)', value: 'Z999', riskLevel: 'low'
 }
 ]);
+
 
 const getoccupationname = async (code: string) => {
   switch (code) {
@@ -321,6 +408,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       occupationCode: event.data.occupationCode,
       occupationRiskLevel: await getoccupationriskLevel(event.data.occupationCode),
       occupationName: await getoccupationname(event.data.occupationCode),
+      purposeCode: event.data.purposeCode,
+      purposeRiskLevel: await getpurposeriskLevel(event.data.purposeCode),
+      purposeName: await getpurposename(event.data.purposeCode),
       phone: event.data.phone,
       remember: event.data.remember,
       currentaddress: {

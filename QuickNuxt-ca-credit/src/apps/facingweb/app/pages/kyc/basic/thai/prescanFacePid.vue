@@ -2,10 +2,10 @@
   <MuiPage>
     <MuiHeader title="การยืนยันตัวตน" />
     <MuiCard>
-      <BizShareText text="เริ่มยืนยันตัวตน" alignment="center" :isBold="true" />
-      <BizKYCPreScan />
+      <BizShareText text="ถ่ายรูปใบหน้าคู่บัตรประชาชน" alignment="center" :isBold="true" />
+      <BizKYCPreScan color="green" />
     </MuiCard>
-    <ActionButton text="ถ่ายรูปบัตรประชาชน" @click="navigateToBrowsePhoto()" />
+    <ActionButton text="ถ่ายรูปใบหน้าคู่บัตรประชาชน" @click="navigateToBrowsePhoto()" />
   </MuiPage>
 </template>
 
@@ -27,8 +27,8 @@ const navigateToBrowsePhoto = async () => {
       manaLib.getPhotoInfo(manaLib.pageId).then((it: any) => {
         if (it) {
           clearInterval(interval);
-          // goVisit("kyc", "kyc-basic-th-preScan-FacePid", endpointId)
-          postData({}, "post-th-prescan");
+          // goVisit("kyc", "kyc-basic-th-create", endpointId)
+          postData({}, "post-th-prescan-face-pid");
         }
       })
     }
@@ -38,8 +38,8 @@ const navigateToBrowsePhoto = async () => {
   await manaLib.browsePhoto().then((it: any) => {
     if (it?.selection?.isComplete) {
       clearInterval(interval);
-      // goVisit("kyc", "kyc-basic-th-preScan-FacePid", endpointId)
-      postData({}, "post-th-prescan");
+      // goVisit("kyc", "kyc-basic-th-create", endpointId)
+      postData({}, "post-th-prescan-face-pid");
     }
   })
 }
